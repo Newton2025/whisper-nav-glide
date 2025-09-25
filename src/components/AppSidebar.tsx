@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Menu, Plus, MessageSquare, Settings, HelpCircle, ChevronRight } from "lucide-react"
+import { Menu, Plus, MessageSquare, Settings, HelpCircle, ChevronRight, Home, Globe, Calendar, Bell, User, ArrowUp, Download } from "lucide-react"
 import { NavLink, useLocation } from "react-router-dom"
 
 import {
@@ -23,6 +23,21 @@ const recentChats = [
   { id: "2", title: "TypeScript best practices", timestamp: "Yesterday" },
   { id: "3", title: "CSS Grid layouts", timestamp: "3 days ago" },
   { id: "4", title: "API integration guide", timestamp: "1 week ago" },
+]
+
+// Main navigation items
+const navigationItems = [
+  { title: "Home", icon: Home, url: "/" },
+  { title: "Discover", icon: Globe, url: "/discover" },
+  { title: "Spaces", icon: Calendar, url: "/spaces" },
+]
+
+// Bottom navigation items
+const bottomItems = [
+  { title: "Notifications", icon: Bell, url: "/notifications" },
+  { title: "Account", icon: User, url: "/account" },
+  { title: "Upgrade", icon: ArrowUp, url: "/upgrade" },
+  { title: "Install", icon: Download, url: "/install" },
 ]
 
 const settingsItems = [
@@ -69,6 +84,26 @@ export function AppSidebar() {
             <Plus className="h-5 w-5 transition-transform duration-300 group-hover:rotate-90" />
             {!isCollapsed && <span className="animate-fade-in">New chat</span>}
           </Button>
+        </div>
+
+        {/* Main Navigation */}
+        <div className="px-3 mb-2">
+          <SidebarMenu className="space-y-1">
+            {navigationItems.map((item, index) => (
+              <SidebarMenuItem key={item.title} className="animate-slide-up" style={{ animationDelay: `${index * 100}ms` }}>
+                <SidebarMenuButton asChild>
+                  <NavLink to={item.url} className={({ isActive }) => `${isActive ? "bg-chat-active text-brand-primary font-medium" : "hover:bg-chat-hover"} group rounded-xl transition-all duration-300 hover:shadow-soft hover:scale-[1.01] p-3`}>
+                    <item.icon className="h-5 w-5 flex-shrink-0 transition-colors duration-300 group-hover:text-brand-primary" />
+                    {!isCollapsed && (
+                      <span className="text-sm font-medium group-hover:text-foreground transition-colors duration-300 animate-fade-in">
+                        {item.title}
+                      </span>
+                    )}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
         </div>
 
         {/* Recent Chats */}
@@ -127,13 +162,33 @@ export function AppSidebar() {
 
         <Separator className="bg-gradient-to-r from-transparent via-sidebar-border to-transparent my-2" />
 
-        {/* Bottom Section */}
+        {/* Bottom Navigation */}
+        <div className="p-3">
+          <SidebarMenu className="space-y-1">
+            {bottomItems.map((item, index) => (
+              <SidebarMenuItem key={item.title} className="animate-slide-up" style={{ animationDelay: `${index * 50}ms` }}>
+                <SidebarMenuButton asChild>
+                  <NavLink to={item.url} className={({ isActive }) => `${isActive ? "bg-chat-active text-brand-primary font-medium" : "hover:bg-chat-hover"} group rounded-xl transition-all duration-300 hover:shadow-soft hover:scale-[1.01] p-3`}>
+                    <item.icon className="h-4 w-4 transition-colors duration-300 group-hover:text-brand-primary" />
+                    {!isCollapsed && (
+                      <span className="text-sm font-medium group-hover:text-foreground transition-colors duration-300 animate-fade-in">
+                        {item.title}
+                      </span>
+                    )}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </div>
+
+        {/* Settings Section */}
         <div className="p-3">
           <SidebarMenu>
             {settingsItems.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <NavLink to={item.url} className={`${getNavCls} group rounded-xl transition-all duration-300 hover:shadow-soft hover:scale-[1.01] p-3`}>
+                  <NavLink to={item.url} className={({ isActive }) => `${isActive ? "bg-chat-active text-brand-primary font-medium" : "hover:bg-chat-hover"} group rounded-xl transition-all duration-300 hover:shadow-soft hover:scale-[1.01] p-3`}>
                     <item.icon className="h-4 w-4 transition-colors duration-300 group-hover:text-brand-primary" />
                     {!isCollapsed && (
                       <span className="text-sm font-medium group-hover:text-foreground transition-colors duration-300 animate-fade-in">
