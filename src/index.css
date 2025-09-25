@@ -54,9 +54,18 @@ All colors MUST be HSL.
     --brand-primary: 217 91% 60%;
     --brand-secondary: 220 9% 46%;
     
+    /* Enhanced Visual Tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
+    --gradient-subtle: linear-gradient(180deg, hsl(220 13% 98%), hsl(220 13% 96%));
+    --shadow-soft: 0 2px 8px hsl(220 13% 0% / 0.04);
+    --shadow-medium: 0 4px 16px hsl(220 13% 0% / 0.08);
+    --shadow-hover: 0 8px 24px hsl(217 91% 60% / 0.15);
+    --glow-primary: 0 0 20px hsl(217 91% 60% / 0.3);
+    
     /* Animation Tokens */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-quick: all 0.15s ease-out;
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
 
   .dark {
