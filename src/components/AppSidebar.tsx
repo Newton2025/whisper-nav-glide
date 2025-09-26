@@ -7,7 +7,6 @@ const navigationItems = [
   { title: "Home", icon: Home, url: "/" },
   { title: "Discover", icon: Globe, url: "/discover" },
   { title: "Spaces", icon: Calendar, url: "/spaces" },
-  { title: "Settings", icon: Settings, url: "/settings" },
 ]
 
 export function AppSidebar() {
@@ -37,7 +36,7 @@ export function AppSidebar() {
       </div>
 
       {/* Navigation Items */}
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 flex-1">
         {navigationItems.map((item) => (
           <NavLink
             key={item.title}
@@ -52,6 +51,21 @@ export function AppSidebar() {
             <span className="text-xs font-medium leading-none">{item.title}</span>
           </NavLink>
         ))}
+      </div>
+
+      {/* Settings at Bottom */}
+      <div className="mt-auto">
+        <NavLink
+          to="/settings"
+          className={({ isActive }) => 
+            `flex flex-col items-center gap-2 p-3 rounded-2xl transition-all duration-300 hover:bg-muted/30 hover:scale-105 group ${
+              isActive ? 'text-brand-primary bg-brand-primary/10' : 'text-muted-foreground hover:text-foreground'
+            }`
+          }
+        >
+          <Settings className="h-5 w-5 transition-colors duration-300" />
+          <span className="text-xs font-medium leading-none">Settings</span>
+        </NavLink>
       </div>
     </div>
   )
