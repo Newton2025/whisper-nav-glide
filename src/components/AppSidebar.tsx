@@ -106,23 +106,21 @@ export function AppSidebar() {
           </SidebarMenu>
         </div>
 
-        {/* Recent Chats */}
-        <div className="flex-1 px-3">
-          <SidebarGroup>
-            {!isCollapsed && (
+        {/* Recent Chats - Only show when expanded */}
+        {!isCollapsed && (
+          <div className="flex-1 px-3">
+            <SidebarGroup>
               <SidebarGroupLabel className="text-sidebar-foreground font-semibold mb-3 text-xs uppercase tracking-wider opacity-70 animate-fade-in">
                 Recent
               </SidebarGroupLabel>
-            )}
-            
-            <SidebarGroupContent>
-              <SidebarMenu className="space-y-1">
-                {recentChats.map((chat, index) => (
-                  <SidebarMenuItem key={chat.id} className="animate-slide-up" style={{ animationDelay: `${index * 50}ms` }}>
-                    <SidebarMenuButton asChild>
-                      <NavLink to={`/chat/${chat.id}`} className={`${getNavCls} group rounded-xl transition-all duration-300 hover:shadow-soft hover:scale-[1.01] p-3`}>
-                        <MessageSquare className="h-4 w-4 flex-shrink-0 transition-colors duration-300 group-hover:text-brand-primary" />
-                        {!isCollapsed && (
+              
+              <SidebarGroupContent>
+                <SidebarMenu className="space-y-1">
+                  {recentChats.map((chat, index) => (
+                    <SidebarMenuItem key={chat.id} className="animate-slide-up" style={{ animationDelay: `${index * 50}ms` }}>
+                      <SidebarMenuButton asChild>
+                        <NavLink to={`/chat/${chat.id}`} className={`${getNavCls} group rounded-xl transition-all duration-300 hover:shadow-soft hover:scale-[1.01] p-3`}>
+                          <MessageSquare className="h-4 w-4 flex-shrink-0 transition-colors duration-300 group-hover:text-brand-primary" />
                           <div className="flex-1 min-w-0 animate-fade-in">
                             <p className="truncate text-sm font-medium group-hover:text-foreground transition-colors duration-300">
                               {chat.title}
@@ -131,17 +129,15 @@ export function AppSidebar() {
                               {chat.timestamp}
                             </p>
                           </div>
-                        )}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+                        </NavLink>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
 
-          {/* Auth Section */}
-          {!isCollapsed && (
+            {/* Auth Section */}
             <div className="mt-6 p-4 bg-gradient-subtle rounded-2xl border border-sidebar-border/50 shadow-soft hover:shadow-medium transition-all duration-300 animate-fade-in">
               <p className="text-sm text-sidebar-foreground mb-3 font-medium">
                 Sign in to start saving your chats
@@ -157,8 +153,11 @@ export function AppSidebar() {
                 Sign in
               </Button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {/* Spacer for collapsed state */}
+        {isCollapsed && <div className="flex-1" />}
 
         <Separator className="bg-gradient-to-r from-transparent via-sidebar-border to-transparent my-2" />
 
