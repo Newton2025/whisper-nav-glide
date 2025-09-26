@@ -62,10 +62,9 @@ export function AppSidebar() {
       <SidebarContent className="flex flex-col h-full">
         {/* Header */}
         <div className="p-4 border-b border-sidebar-border/50 bg-gradient-to-r from-transparent to-sidebar-accent/30">
-          <div className="flex items-center justify-between">
-            <SidebarTrigger className="p-2 hover:bg-sidebar-accent/70 rounded-xl transition-all duration-300 hover:shadow-soft hover:scale-105" />
+          <div className="flex items-center justify-center">
             {!isCollapsed && (
-              <div className="ml-3 animate-fade-in">
+              <div className="animate-fade-in text-center">
                 <h1 className="text-lg font-semibold text-sidebar-foreground bg-gradient-primary bg-clip-text text-transparent">
                   Gemini
                 </h1>
@@ -79,9 +78,9 @@ export function AppSidebar() {
         <div className="p-3">
           <Button 
             variant="ghost" 
-            className="w-full justify-start gap-3 h-12 text-sidebar-foreground font-medium rounded-xl transition-all duration-300 hover:bg-gradient-primary hover:text-white hover:shadow-hover hover:scale-[1.02] group"
+            className={`w-full ${isCollapsed ? 'justify-center px-2' : 'justify-start gap-3'} h-12 text-sidebar-foreground font-medium rounded-xl transition-all duration-300 hover:bg-gradient-primary hover:text-white hover:shadow-hover hover:scale-[1.02] group`}
           >
-            <Plus className="h-5 w-5 transition-transform duration-300 group-hover:rotate-90" />
+            <Plus className="h-5 w-5 transition-transform duration-300 group-hover:rotate-90 flex-shrink-0" />
             {!isCollapsed && <span className="animate-fade-in">New chat</span>}
           </Button>
         </div>
