@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom"
-import { Plus, Home, Globe, Calendar, Settings } from "lucide-react"
+import { Plus, Home, Globe, Calendar, Settings, Menu, MessageSquare } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // Navigation items
@@ -9,62 +9,131 @@ const navigationItems = [
   { title: "Spaces", icon: Calendar, url: "/spaces" },
 ]
 
-export function AppSidebar() {
+// Mock recent chats for expanded view
+const recentChats = [
+  { id: "1", title: "React components help", timestamp: "2 hours ago" },
+  { id: "2", title: "TypeScript best practices", timestamp: "Yesterday" },
+  { id: "3", title: "CSS Grid layouts", timestamp: "3 days ago" },
+]
+
+interface AppSidebarProps {
+  isExpanded: boolean
+  setIsExpanded: (expanded: boolean) => void
+}
+
+export function AppSidebar({ isExpanded, setIsExpanded }: AppSidebarProps) {
   const location = useLocation()
   const currentPath = location.pathname
 
   const isActive = (path: string) => currentPath === path
 
   return (
-    <div className="fixed left-0 top-0 h-full w-20 bg-background border-r border-border/50 flex flex-col items-center py-6 z-50">
-      {/* Logo */}
-      <div className="mb-8">
-        <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center shadow-glow">
-          <div className="w-4 h-4 bg-white rounded-sm"></div>
+    <div className={`fixed left-0 top-0 h-full bg-background border-r border-border/50 flex flex-col z-50 transition-all duration-300 ${
+      isExpanded ? 'w-72' : 'w-20'
+    }`}>
+      {/* Header with Menu/Logo */}
+      <div className="p-6 border-b border-border/50">
+        <div className="flex items-center justify-between">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="w-8 h-8 rounded-lg hover:bg-muted/50 transition-all duration-300 hover:scale-105"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+          {isExpanded && (
+            <div className="ml-3 animate-fade-in">
+              <h1 className="text-lg font-semibold text-foreground bg-gradient-primary bg-clip-text text-transparent">
+                Gemini
+              </h1>
+              <p className="text-sm text-muted-foreground font-medium">2.5 Flash</p>
+            </div>
+          )}
         </div>
       </div>
 
       {/* New Chat Button */}
-      <div className="mb-8">
+      <div className="p-3">
         <Button 
           variant="ghost" 
-          size="icon"
-          className="w-12 h-12 rounded-2xl bg-muted/20 hover:bg-gradient-primary hover:text-white transition-all duration-300 hover:shadow-hover hover:scale-105 group border border-border/20"
+          className={`w-full h-12 rounded-2xl bg-muted/20 hover:bg-gradient-primary hover:text-white transition-all duration-300 hover:shadow-hover hover:scale-105 group border border-border/20 ${
+            isExpanded ? 'justify-start gap-3 px-4' : 'justify-center'
+          }`}
         >
-          <Plus className="h-5 w-5 transition-transform duration-300 group-hover:rotate-90" />
+          <Plus className="h-5 w-5 transition-transform duration-300 group-hover:rotate-90 flex-shrink-0" />
+          {isExpanded && <span className="animate-fade-in font-medium">New chat</span>}
         </Button>
       </div>
 
       {/* Navigation Items */}
-      <div className="flex flex-col gap-6 flex-1">
-        {navigationItems.map((item) => (
-          <NavLink
-            key={item.title}
-            to={item.url}
-            className={({ isActive }) => 
-              `flex flex-col items-center gap-2 p-3 rounded-2xl transition-all duration-300 hover:bg-muted/30 hover:scale-105 group ${
-                isActive ? 'text-brand-primary bg-brand-primary/10' : 'text-muted-foreground hover:text-foreground'
-              }`
-            }
-          >
-            <item.icon className="h-5 w-5 transition-colors duration-300" />
-            <span className="text-xs font-medium leading-none">{item.title}</span>
-          </NavLink>
-        ))}
+      <div className="px-3 flex-1">
+        <div className="flex flex-col gap-2">
+          {navigationItems.map((item) => (
+            <NavLink
+              key={item.title}
+              to={item.url}
+              className={({ isActive }) => 
+                `flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 hover:bg-muted/30 hover:scale-105 group ${
+                  isActive ? 'text-brand-primary bg-brand-primary/10' : 'text-muted-foreground hover:text-foreground'
+                } ${isExpanded ? 'justify-start' : 'justify-center flex-col gap-2'}`
+              }
+            >
+              <item.icon className="h-5 w-5 transition-colors duration-300 flex-shrink-0" />
+              <span className={`text-sm font-medium leading-none transition-colors duration-300 ${
+                isExpanded ? 'animate-fade-in' : 'text-xs'
+              }`}>
+                {item.title}
+              </span>
+            </NavLink>
+          ))}
+        </div>
+
+        {/* Recent Chats - Only show when expanded */}
+        {isExpanded && (
+          <div className="mt-8 animate-fade-in">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-3">
+              Recent
+            </h3>
+            <div className="space-y-1">
+              {recentChats.map((chat) => (
+                <NavLink
+                  key={chat.id}
+                  to={`/chat/${chat.id}`}
+                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-muted/30 transition-all duration-300 hover:scale-105 group"
+                >
+                  <MessageSquare className="h-4 w-4 text-muted-foreground group-hover:text-brand-primary transition-colors duration-300 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate group-hover:text-brand-primary transition-colors duration-300">
+                      {chat.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground group-hover:text-brand-primary/70 transition-colors duration-300">
+                      {chat.timestamp}
+                    </p>
+                  </div>
+                </NavLink>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Settings at Bottom */}
-      <div className="mt-auto">
+      <div className="p-3 border-t border-border/50">
         <NavLink
           to="/settings"
           className={({ isActive }) => 
-            `flex flex-col items-center gap-2 p-3 rounded-2xl transition-all duration-300 hover:bg-muted/30 hover:scale-105 group ${
+            `flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 hover:bg-muted/30 hover:scale-105 group ${
               isActive ? 'text-brand-primary bg-brand-primary/10' : 'text-muted-foreground hover:text-foreground'
-            }`
+            } ${isExpanded ? 'justify-start' : 'justify-center flex-col gap-2'}`
           }
         >
-          <Settings className="h-5 w-5 transition-colors duration-300" />
-          <span className="text-xs font-medium leading-none">Settings</span>
+          <Settings className="h-5 w-5 transition-colors duration-300 flex-shrink-0" />
+          <span className={`text-sm font-medium leading-none transition-colors duration-300 ${
+            isExpanded ? 'animate-fade-in' : 'text-xs'
+          }`}>
+            Settings
+          </span>
         </NavLink>
       </div>
     </div>

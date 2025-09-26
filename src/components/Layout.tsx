@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { useState, ReactNode } from "react"
 import { AppSidebar } from "@/components/AppSidebar"
 
 interface LayoutProps {
@@ -6,10 +6,14 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false)
+
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <AppSidebar />
-      <main className="flex-1 flex flex-col ml-20">
+      <AppSidebar isExpanded={isSidebarExpanded} setIsExpanded={setIsSidebarExpanded} />
+      <main className={`flex-1 flex flex-col transition-all duration-300 ${
+        isSidebarExpanded ? 'ml-72' : 'ml-20'
+      }`}>
         {/* Top Header */}
         <header className="h-16 flex items-center justify-between px-6 border-b border-border/50 bg-gradient-subtle backdrop-blur-md supports-[backdrop-filter]:bg-background/60 shadow-soft">
           <div className="flex items-center gap-3">
