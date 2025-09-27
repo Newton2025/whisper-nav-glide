@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom"
-import { Plus, Home, Globe, Calendar, Menu, MessageSquare, Download, Zap, Bell } from "lucide-react"
+import { Plus, Home, Globe, Calendar, Menu, MessageSquare, Download, Zap, Bell, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // Navigation items
@@ -26,36 +26,51 @@ const recentChats = [
 interface AppSidebarProps {
   isExpanded: boolean
   setIsExpanded: (expanded: boolean) => void
+  isMobile?: boolean
 }
 
-export function AppSidebar({ isExpanded, setIsExpanded }: AppSidebarProps) {
+export function AppSidebar({ isExpanded, setIsExpanded, isMobile = false }: AppSidebarProps) {
   const location = useLocation()
   const currentPath = location.pathname
 
   const isActive = (path: string) => currentPath === path
 
   return (
-    <div className={`fixed left-0 top-0 h-full bg-background border-r border-border/50 flex flex-col z-50 transition-all duration-300 ${
-      isExpanded ? 'w-72' : 'w-20'
+    <div className={`${
+      isMobile ? 'fixed' : 'fixed'
+    } left-0 top-0 h-full bg-background border-r border-border/50 flex flex-col z-50 transition-all duration-300 ${
+      isMobile ? 'w-72' : (isExpanded ? 'w-72' : 'w-20')
     }`}>
       {/* Header with Menu/Logo */}
       <div className="p-6 border-b border-border/50">
         <div className="flex items-center justify-between">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="w-8 h-8 rounded-lg hover:bg-muted/50 transition-all duration-300 hover:scale-105"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
-          {isExpanded && (
-            <div className="ml-3 animate-fade-in">
+          {!isMobile && (
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="w-8 h-8 rounded-lg hover:bg-muted/50 transition-all duration-300 hover:scale-105"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          )}
+          {(isExpanded || isMobile) && (
+            <div className={`${isMobile ? '' : 'ml-3'} animate-fade-in`}>
               <h1 className="text-lg font-semibold text-foreground bg-gradient-primary bg-clip-text text-transparent">
                 Gemini
               </h1>
               <p className="text-sm text-muted-foreground font-medium">2.5 Flash</p>
             </div>
+          )}
+          {isMobile && (
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setIsExpanded(false)}
+              className="w-8 h-8 rounded-lg hover:bg-muted/50 transition-all duration-300 hover:scale-105"
+            >
+              <X className="h-5 w-5" />
+            </Button>
           )}
         </div>
       </div>
@@ -65,11 +80,11 @@ export function AppSidebar({ isExpanded, setIsExpanded }: AppSidebarProps) {
         <Button 
           variant="ghost" 
           className={`w-full h-12 rounded-2xl bg-muted/20 hover:bg-gradient-primary hover:text-white transition-all duration-300 hover:shadow-hover hover:scale-105 group border border-border/20 ${
-            isExpanded ? 'justify-start gap-3 px-4' : 'justify-center'
+            (isExpanded || isMobile) ? 'justify-start gap-3 px-4' : 'justify-center'
           }`}
         >
           <Plus className="h-5 w-5 transition-transform duration-300 group-hover:rotate-90 flex-shrink-0" />
-          {isExpanded && <span className="animate-fade-in font-medium">New chat</span>}
+          {(isExpanded || isMobile) && <span className="animate-fade-in font-medium">New chat</span>}
         </Button>
       </div>
 
@@ -83,12 +98,12 @@ export function AppSidebar({ isExpanded, setIsExpanded }: AppSidebarProps) {
               className={({ isActive }) => 
                 `flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 hover:bg-muted/30 hover:scale-105 group ${
                   isActive ? 'text-brand-primary bg-brand-primary/10' : 'text-muted-foreground hover:text-foreground'
-                } ${isExpanded ? 'justify-start' : 'justify-center flex-col gap-2'}`
+                } ${(isExpanded || isMobile) ? 'justify-start' : 'justify-center flex-col gap-2'}`
               }
             >
               <item.icon className="h-5 w-5 transition-colors duration-300 flex-shrink-0" />
               <span className={`text-sm font-medium leading-none transition-colors duration-300 ${
-                isExpanded ? 'animate-fade-in' : 'text-xs'
+                (isExpanded || isMobile) ? 'animate-fade-in' : 'text-xs'
               }`}>
                 {item.title}
               </span>
@@ -97,7 +112,7 @@ export function AppSidebar({ isExpanded, setIsExpanded }: AppSidebarProps) {
         </div>
 
         {/* Recent Chats - Only show when expanded */}
-        {isExpanded && (
+        {(isExpanded || isMobile) && (
           <div className="mt-8 animate-fade-in">
             <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-3">
               Recent
@@ -134,14 +149,14 @@ export function AppSidebar({ isExpanded, setIsExpanded }: AppSidebarProps) {
               variant="ghost"
               onClick={button.action}
               className={`transition-all duration-300 hover:bg-muted/30 hover:scale-105 group ${
-                isExpanded 
+                (isExpanded || isMobile)
                   ? 'justify-start gap-3 p-3 rounded-2xl text-muted-foreground hover:text-foreground' 
                   : 'justify-center flex-col gap-2 p-3 rounded-2xl text-muted-foreground hover:text-foreground'
               }`}
             >
               <button.icon className="h-5 w-5 transition-colors duration-300 flex-shrink-0" />
               <span className={`text-sm font-medium leading-none transition-colors duration-300 ${
-                isExpanded ? 'animate-fade-in' : 'text-xs'
+                (isExpanded || isMobile) ? 'animate-fade-in' : 'text-xs'
               }`}>
                 {button.title}
               </span>
