@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom"
-import { Plus, Home, Globe, Calendar, Settings, Menu, MessageSquare } from "lucide-react"
+import { Plus, Home, Globe, Calendar, Menu, MessageSquare, Download, Zap, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // Navigation items
@@ -7,6 +7,13 @@ const navigationItems = [
   { title: "Home", icon: Home, url: "/" },
   { title: "Discover", icon: Globe, url: "/discover" },
   { title: "Spaces", icon: Calendar, url: "/spaces" },
+]
+
+// Bottom action buttons
+const bottomButtons = [
+  { title: "Install", icon: Download, action: () => console.log("Install") },
+  { title: "Upgrade", icon: Zap, action: () => console.log("Upgrade") },
+  { title: "Notifications", icon: Bell, action: () => console.log("Notifications") },
 ]
 
 // Mock recent chats for expanded view
@@ -118,23 +125,29 @@ export function AppSidebar({ isExpanded, setIsExpanded }: AppSidebarProps) {
         )}
       </div>
 
-      {/* Settings at Bottom */}
+      {/* Bottom Action Buttons */}
       <div className="p-3 border-t border-border/50">
-        <NavLink
-          to="/settings"
-          className={({ isActive }) => 
-            `flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 hover:bg-muted/30 hover:scale-105 group ${
-              isActive ? 'text-brand-primary bg-brand-primary/10' : 'text-muted-foreground hover:text-foreground'
-            } ${isExpanded ? 'justify-start' : 'justify-center flex-col gap-2'}`
-          }
-        >
-          <Settings className="h-5 w-5 transition-colors duration-300 flex-shrink-0" />
-          <span className={`text-sm font-medium leading-none transition-colors duration-300 ${
-            isExpanded ? 'animate-fade-in' : 'text-xs'
-          }`}>
-            Settings
-          </span>
-        </NavLink>
+        <div className={`flex gap-2 ${isExpanded ? 'flex-col' : 'flex-col'}`}>
+          {bottomButtons.map((button) => (
+            <Button
+              key={button.title}
+              variant="ghost"
+              onClick={button.action}
+              className={`transition-all duration-300 hover:bg-muted/30 hover:scale-105 group ${
+                isExpanded 
+                  ? 'justify-start gap-3 p-3 rounded-2xl text-muted-foreground hover:text-foreground' 
+                  : 'justify-center flex-col gap-2 p-3 rounded-2xl text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <button.icon className="h-5 w-5 transition-colors duration-300 flex-shrink-0" />
+              <span className={`text-sm font-medium leading-none transition-colors duration-300 ${
+                isExpanded ? 'animate-fade-in' : 'text-xs'
+              }`}>
+                {button.title}
+              </span>
+            </Button>
+          ))}
+        </div>
       </div>
     </div>
   )
